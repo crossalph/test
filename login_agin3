@@ -1,0 +1,102 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <conio.h>
+#include <string.h>
+
+void data_login()
+{
+    time_t t = time(NULL);
+    struct tm* tm_local = localtime(&t);
+    printf("\t\tTerakhir login: %s", asctime(tm_local));
+}
+void identitydata()
+{
+    data_login();
+    printf("\n\t\tApa kabarmu, Luthfi?\n\n");
+    printf("\t\tNama\t: Luthfi Hakim");
+    printf("\n\t\tNIM\t: 1234567890");
+    printf("\n\t\tJurusan\t: Rekayasan Ternak Ikan");
+    printf("\n\t\tE-mail\t: luthfi@localhost\n");
+}
+int generateToken()
+{
+    int r;
+    int x = 99999;
+    int y = 999999;
+    int diff = y - x;
+    srand(time(NULL));
+    r = rand() % (diff + 1) + x;
+    //printf("%d\n", r);
+    FILE *out=fopen("token.txt","w");
+	fprintf(out,"%d\n",r);
+	fclose(out);
+    //classsendfile
+	printf("\n\t\t=====Sukses mengirim token=====\n");
+    return r;
+}
+
+void login()
+{
+    char userid[]="lpx" ,password[]="123",user[15],pass[15];
+    int n=1,a,b,i=1;
+    int token;
+
+    printf("\t\tMasukkan User ID dan Password ( 3X Kesempatan )");
+
+    for(n=1;n<=3;n++)
+    {
+        printf("\n\t\tUser-ID  :");
+        scanf("%s",user);
+        printf("\n\t\tPassword  :");
+        scanf("%s",pass);
+        
+        a=strcmp(userid,user);
+        b=strcmp(password,pass);
+
+        if(a==0 && b==0)
+        {
+            int random_token = generateToken();
+            printf("\n\t\tMasukan token yang telah dikirim ke e-mail: ");
+            scanf("%d", &token);
+            if ( random_token == token)
+            {
+                printf("\n\t\t=====Login berhasil!!!=====\n");
+                //system("cls");
+                identitydata();
+                break;                
+            }
+            else
+            {
+                system("cls");
+                printf("\n\t\t\t=============");
+                printf("\n\t\t\t Token salah");
+                printf("\n\t\t\tAkses ditolak");
+                printf("\n\t\t\t=============\n");
+                break;
+            }                
+        }
+        else
+        {
+            printf("\n\t\t====Kesemptan tinggal %d kali lagi====\n",3-n);
+        }
+
+    }
+    if(n==4)
+    {
+        system("cls");
+        printf("\t\t======================");
+        printf("\n\t\tMaaf, akses ditolak ");
+        printf("\n\t\t====================");
+    }
+}
+
+int main()
+{
+    printf("\t\t===========================================\n");
+    printf("\t\tSelamat datang di sistem akademik mahasiswa\n");
+    printf("\t\t===========================================\n");
+    login();
+    return 0;
+}
